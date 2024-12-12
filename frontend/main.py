@@ -40,20 +40,48 @@ async def main():
             st.session_state.current_step = 'generating'
             
             try:
-                async with httpx.AsyncClient(timeout=60.0) as client:
+                async with httpx.AsyncClient(timeout=120.0) as client:
                     with st.spinner('Generating your application...'):
+                        # Get the advanced options
+                        col = st.columns(1)[0]
+                        with col:
+                            project_type = st.session_state.get('project_type', 'Web Application')
+                            features = st.session_state.get('features', ['Authentication'])
+                        
+                        # Make the API request
                         response = await client.post(
-                            "http://localhost:8000/generate",
-                            json={"description": user_input, "project_type": "Web Application"}
+                            "http://0.0.0.0:8000/generate",
+                            json={
+                                "description": user_input,
+                                "project_type": project_type,
+                                "features": features
+                            },
+                            timeout=120.0
                         )
+                        
+                        # Handle the response
                         if response.status_code == 200:
                             st.session_state.generated_code = response.json()
                             st.session_state.current_step = 'complete'
                             st.success('Application generated successfully!')
                         else:
-                            st.error(f"Error generating application: {response.text}")
+                            error_detail = "Unknown error"
+                            try:
+                                error_response = response.json()
+                                error_detail = error_response.get('detail', str(response.text))
+                            except:
+                                error_detail = str(response.text)
+                            st.error(f"Error generating application: {error_detail}")
+                            st.session_state.current_step = 'input'
+                            
+            except httpx.TimeoutError:
+                st.error("Request timed out. The server took too long to respond. Please try again.")
+                st.session_state.current_step = 'input'
+            except httpx.ConnectError:
+                st.error("Could not connect to the backend server. Please ensure the server is running.")
+                st.session_state.current_step = 'input'
             except Exception as e:
-                st.error(f"Failed to communicate with the backend server: {str(e)}")
+                st.error(f"An unexpected error occurred: {str(e)}")
                 st.session_state.current_step = 'input'
     
     with col2:
