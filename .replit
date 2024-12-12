@@ -31,7 +31,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "PYTHONPATH=. uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload"
+args = "PYTHONPATH=. uvicorn api.main:app --host 0.0.0.0 --port 8000"
 waitForPort = 8000
 
 [[workflows.workflow]]
@@ -46,7 +46,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run frontend/main.py --server.port 5000"
+args = "streamlit run frontend/main.py"
 waitForPort = 5000
 
 [deployment]
