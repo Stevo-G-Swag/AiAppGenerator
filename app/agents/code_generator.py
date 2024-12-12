@@ -1,6 +1,7 @@
 from app.utils.openai_client import get_completion
 from app.utils.code_validator import validate_syntax
 import json
+from datetime import datetime
 
 class CodeGenerator:
     async def generate(self, project_spec: dict) -> dict:
