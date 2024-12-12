@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from api.models import AppRequest, AppResponse
-from app.agents.project_manager import ProjectManager
-from app.agents.code_generator import CodeGenerator
-from app.agents.testing_agent import TestingAgent
-from app.agents.documentation_agent import DocumentationAgent
+from agents.project_manager import ProjectManager
+from agents.code_generator import CodeGenerator
+from agents.testing_agent import TestingAgent
+from agents.documentation_agent import DocumentationAgent
 
 app = FastAPI(title="AI App Generator API")
 
