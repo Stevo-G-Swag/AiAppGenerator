@@ -19,5 +19,5 @@ class DocumentationAgent:
         Format the response in Markdown.
         """
         
-        documentation = await get_completion(prompt)
+        documentation = await get_completion(prompt, response_format="text")
         return documentation

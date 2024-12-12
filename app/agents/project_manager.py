@@ -8,7 +8,7 @@ class ProjectManager:
         
         {description}
         
-        Generate a JSON response with the following structured format:
+        Please provide the specification in a valid JSON format. Return a JSON object with the following structured format:
         {{
             "structure": {{
                 "directories": {{
@@ -56,7 +56,7 @@ class ProjectManager:
         }}
         
         Ensure the specification is detailed and follows modern best practices for the specified project type.
-        Include error handling, testing requirements, and security considerations.
+        Include error handling, testing requirements, and security considerations in the JSON response.
         """
         
         response = await get_completion(prompt)

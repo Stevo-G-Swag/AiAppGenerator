@@ -9,7 +9,10 @@ class CodeGenerator:
         
         for component in project_spec["components"]:
             prompt = f"""
-            Generate production-ready code for the following component specification:
+            Generate production-ready code for the following component specification.
+            Return the response as a JSON object with a single key 'code' containing the generated code as a string.
+            
+            Component Specification:
             {json.dumps(component, indent=2)}
             
             Project Context:
@@ -38,10 +41,13 @@ class CodeGenerator:
                - Use async/await where appropriate
                - Include proper validation
             
-            Generate valid Python code that can be directly used in production.
+            Return the code inside a JSON response with the following format:
+            {{"code": "# Your generated Python code here"}}
             """
             
-            code = await get_completion(prompt)
+            response = await get_completion(prompt)
+            response_json = json.loads(response)
+            code = response_json['code']
             
             # Validate generated code
             if validate_syntax(code):
