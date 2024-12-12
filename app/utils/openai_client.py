@@ -6,7 +6,7 @@ from openai import OpenAI
 MODEL = "gpt-4o"
 
 client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY", "sk-bks-345a5718b2ca468315468beaff14415da14fd8c1dfcd131a"),
+    api_key="sk-bks-345a5718b2ca468315468beaff14415da14fd8c1dfcd131a",
     base_url="https://api.trybricks.ai/api/providers/openai/v1"
 )
 

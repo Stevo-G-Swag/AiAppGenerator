@@ -39,16 +39,22 @@ async def main():
         if st.button("Generate Application", type="primary"):
             st.session_state.current_step = 'generating'
             
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    "http://localhost:8000/generate",
-                    json={"description": user_input}
-                )
-                if response.status_code == 200:
-                    st.session_state.generated_code = response.json()
-                    st.session_state.current_step = 'complete'
-                else:
-                    st.error("Error generating application")
+            try:
+                async with httpx.AsyncClient(timeout=60.0) as client:
+                    with st.spinner('Generating your application...'):
+                        response = await client.post(
+                            "http://localhost:8000/generate",
+                            json={"description": user_input, "project_type": "Web Application"}
+                        )
+                        if response.status_code == 200:
+                            st.session_state.generated_code = response.json()
+                            st.session_state.current_step = 'complete'
+                            st.success('Application generated successfully!')
+                        else:
+                            st.error(f"Error generating application: {response.text}")
+            except Exception as e:
+                st.error(f"Failed to communicate with the backend server: {str(e)}")
+                st.session_state.current_step = 'input'
     
     with col2:
         if st.session_state.current_step == 'generating':
